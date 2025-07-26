@@ -36,6 +36,19 @@ jobs:
 
       - name: Image Scan
         run: trivy image polagana/tic-tac-toe:latest > trivyimage.txt
+  deploy:
+   needs: build-analyze-scan
+   runs-on: [self-hosted]
+   steps:
+      - name: docker pull image
+        run: docker pull polagana/tic-tac-toe:latest
+
+      - name: Image Scan
+        run: trivy image polagana/tic-tac-toe:latest > trivyimagedeploy.txt
+
+      - name: Deploy to container
+        run: docker run -d --name game -p 3000:3000 polagana/tic-tac-toe:latest
+        
           
            
         
